@@ -7,13 +7,13 @@ app = FastAPI()
 users = {'1': 'Имя: Example, возраст: 18'}
 
 
-@app.get("/user")
+@app.get("/users")
 async def get_user() -> dict:
     return users
 
 @app.post("/user/{username}/{age}")
 async def post_user(username: str, age: int) -> str:
-    user_id = str(int(max(users, key=str))+1)
+    user_id = str(max(int(k) for k in users.keys()) + 1)
     users[user_id] = f"Имя: {username}, возраст: {age}"
     return f"User {user_id} is registered"
 
@@ -28,5 +28,5 @@ async def delete_user(user_id: int) -> str:
     removed_user = users.pop(str(user_id), None)  # Удалить без ошибки, если ключ отсутствует
     if removed_user is None:
         return f"User {user_id} does not exist"
-    return f"The user {user_id} is deleted"
+    return f"User {user_id} has been deleted"
 
