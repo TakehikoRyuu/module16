@@ -38,11 +38,11 @@ async def post_user(username: Annotated[str, Path(min_length=5, max_length=20,
 
 
 
-@app.put("/user/{user_id}/{username}/{age}")
+@app.put("/user/{user_id}/{username}/{age}", response_model=User)
 async def put_user(user_id: Annotated[int, Path(ge=1, le=100, description="Enter User ID", example=10)],
                    username: Annotated[str, Path(min_length=5, max_length=20,
                                                  description="Enter username", example="UrbanUser")],
-                   age: Annotated[int, Path(ge=18, le=120, description="Enter age", example="24")]) -> User:
+                   age: Annotated[int, Path(ge=18, le=120, description="Enter age", example="24")]):
     try:
         if user_id in users.keys():
             user = users[user_id]
@@ -53,8 +53,8 @@ async def put_user(user_id: Annotated[int, Path(ge=1, le=100, description="Enter
         raise HTTPException(status_code=404, detail="User was not found")
 
 
-@app.delete("/user/{user_id}")
-async def delete_user(user_id: Annotated[int, Path(ge=1, le=100, description="Enter User ID", example=10)]) -> User:
+@app.delete("/user/{user_id}", response_model=User)
+async def delete_user(user_id: Annotated[int, Path(ge=1, le=100, description="Enter User ID", example=10)]):
     try:
         users.pop(user_id)
         return f"User {user_id} has been deleted"
